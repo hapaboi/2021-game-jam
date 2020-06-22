@@ -16,7 +16,7 @@ public class Grounded : MonoBehaviour
     {
         
     }
-
+    //when touching object with ground tag make isgrounded = true
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.tag == "Ground")
@@ -24,7 +24,7 @@ public class Grounded : MonoBehaviour
             Player.GetComponent<Move>().isGrounded = true;
         }
     }
-
+    //when exiting collision with object with ground tag, change player isgrounded to false
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.tag == "Ground")
