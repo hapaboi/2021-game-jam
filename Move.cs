@@ -14,7 +14,7 @@ public class Move : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        BoxCollide = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -79,10 +79,14 @@ public class Move : MonoBehaviour
     if(Input.GetButton("Crouch"))
         {
             animator.SetBool("IsCrouching", true);
+            BoxCollide.size = new Vector2(BoxCollide.size.x, 3.397791f);
+            BoxCollide.offset = new Vector2(BoxCollide.offset.x, 3.397791f);
         }
         else
         {
             animator.SetBool("IsCrouching", false);
+            BoxCollide.size = new Vector2(BoxCollide.size.x, 7.634738f);
+            BoxCollide.offset = new Vector2(BoxCollide.offset.x, 3.397791f);
         }
     }
 }
