@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Move : MonoBehaviour
 {
-    public float JumpHeight = 5f;
+    public float JumpHeight = 1f;
     public float moveSpeed = 5f;
     public bool isGrounded = false;
+    public bool isRight = true;
     public int Jumpsleft = 1;
     public Animator animator;
     public float moving = 0;
@@ -27,6 +28,7 @@ public class Move : MonoBehaviour
         //get horizontal input and move character
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
         transform.position += movement * Time.deltaTime * moveSpeed;
+        Flip(movement);
 
     }
     void Jump()
@@ -53,11 +55,11 @@ public class Move : MonoBehaviour
         //ROTATION WITH Q/E
         if (Input.GetAxis("Rotate") < 0)
         {
-            transform.Rotate(Vector3.forward * 1f);
+            transform.Rotate(Vector3.forward * 0.5f);
         }
         if (Input.GetAxis("Rotate") > 0)
         {
-            transform.Rotate(Vector3.forward * -1f);
+            transform.Rotate(Vector3.forward * -0.5f);
         }
     }
     void AnimatorMove()
@@ -74,19 +76,30 @@ public class Move : MonoBehaviour
         //set animator variable speed to movement value
         animator.SetFloat("Speed", moving);
     }
+    void Flip(Vector3 movement)
+    {
+        if (movement.x < 0 && isRight == true)
+        {
+            transform.Rotate(0f, 180f, 0f);
+        }
+        else if (movement.x >= 0 && isRight == false)
+        {
+            transform.Rotate(0f, 180f, 0f);
+        }
+    }
     void Crouch()
     {
-    if(Input.GetButton("Crouch"))
+    if(Input.GetButton("Crouch") && isGrounded == true)
         {
             animator.SetBool("IsCrouching", true);
             BoxCollide.size = new Vector2(BoxCollide.size.x, 3.397791f);
-            BoxCollide.offset = new Vector2(BoxCollide.offset.x, 3.397791f);
+            BoxCollide.offset = new Vector2(BoxCollide.offset.x, -2f);
         }
         else
         {
             animator.SetBool("IsCrouching", false);
             BoxCollide.size = new Vector2(BoxCollide.size.x, 7.634738f);
-            BoxCollide.offset = new Vector2(BoxCollide.offset.x, 3.397791f);
+            BoxCollide.offset = new Vector2(BoxCollide.offset.x, 0.08115101f);
         }
     }
 }
