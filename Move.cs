@@ -53,13 +53,27 @@ public class Move : MonoBehaviour
     void Rotate()
     {
         //ROTATION WITH Q/E
-        if (Input.GetAxis("Rotate") < 0)
+        if (isRight == true)
         {
-            transform.Rotate(Vector3.forward * 0.5f);
+            if (Input.GetAxis("Rotate") < 0)
+            {
+                transform.Rotate(Vector3.forward * 0.5f);
+            }
+            if (Input.GetAxis("Rotate") > 0)
+            {
+                transform.Rotate(Vector3.forward * -0.5f);
+            }
         }
-        if (Input.GetAxis("Rotate") > 0)
+        if (isRight == false)
         {
-            transform.Rotate(Vector3.forward * -0.5f);
+            if (Input.GetAxis("Rotate") < 0)
+            {
+                transform.Rotate(Vector3.forward * -0.5f);
+            }
+            if (Input.GetAxis("Rotate") > 0)
+            {
+                transform.Rotate(Vector3.forward * 0.5f);
+            }
         }
     }
     void AnimatorMove()
@@ -81,15 +95,17 @@ public class Move : MonoBehaviour
         if (movement.x < 0 && isRight == true)
         {
             transform.Rotate(0f, 180f, 0f);
+            isRight = false;
         }
-        else if (movement.x >= 0 && isRight == false)
+        else if (movement.x > 0 && isRight == false)
         {
             transform.Rotate(0f, 180f, 0f);
+            isRight = true;
         }
     }
     void Crouch()
     {
-    if(Input.GetButton("Crouch") && isGrounded == true)
+    if(Input.GetButton("Crouch"))
         {
             animator.SetBool("IsCrouching", true);
             BoxCollide.size = new Vector2(BoxCollide.size.x, 3.397791f);
