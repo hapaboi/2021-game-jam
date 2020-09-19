@@ -5,31 +5,31 @@ using UnityEngine;
 public class Grounded : MonoBehaviour
 {
     GameObject Player;
+    public float checkRadius;
+    public Transform groundCheck;
+    public LayerMask WhatisGround;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        Player = gameObject.transform.parent.gameObject;
+        Player = GameObject.Find ("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Player.GetComponent<Move>().isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, WhatisGround);
     }
-    //when touching object with ground tag make isgrounded = true
-    private void OnCollisionEnter2D(Collision2D collision)
+
+
+
+    /*private void OnDrawGizmos()
     {
-        if (collision.collider.tag == "Ground")
-        {
-            Player.GetComponent<Move>().isGrounded = true;
-        }
+        Gizmos.color = Color.red;
+     //Use the same vars you use to draw your Overlap SPhere to draw your Wire Sphere.
+        Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
     }
-    //when exiting collision with object with ground tag, change player isgrounded to false
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.collider.tag == "Ground")
-        {
-            Player.GetComponent<Move>().isGrounded = false;
-        }
-    }
+    */
+    
 }

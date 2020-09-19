@@ -8,49 +8,64 @@ public class Move : MonoBehaviour
     public float moveSpeed = 5f;
     public bool isGrounded = false;
     public bool isRight = true;
-    public int Jumpsleft = 1;
+    private int Jumpsleft;
+    public int extraJumpsValue;
     public Animator animator;
     public float moving = 0;
     public BoxCollider2D BoxCollide;
+    private Rigidbody2D rb;
+    public bool isHeadHitting = false;
     // Start is called before the first frame update
     void Start()
     {
         BoxCollide = GetComponent<BoxCollider2D>();
+        rb = GetComponent<Rigidbody2D>();
+        Jumpsleft = extraJumpsValue;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Rotate();
+        //Rotate();
         Jump();
-        AnimatorMove();
         Crouch();
+        AnimatorMove();
         //get horizontal input and move character
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0f, 0f);
-        transform.position += movement * Time.deltaTime * moveSpeed;
-        Flip(movement);
+        rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
+        Flip(rb.velocity);
 
     }
     void Jump()
     {
+        if (Input.GetButtonDown("Jump") && Jumpsleft > 0)
+        {
+            rb.velocity = Vector2.up * JumpHeight;
+            Jumpsleft--;
+        }
+        /*else if (Input.GetButtonDown("Jump") && Jumpsleft == 0 && isGrounded == true)
+        {
+            rb.velocity = Vector2.up * JumpHeight;
+        } */
         //if on ground set isjumping parameter to false and give double jump
         if (isGrounded == true)
         {
             animator.SetBool("IsJumping", false);
-            Jumpsleft = 1;
+            Jumpsleft = extraJumpsValue;
         }
         //if not grounded set isjumping to true
         if (isGrounded == false)
         {
             animator.SetBool("IsJumping", true);
         }
+        /*
         if (Input.GetButtonDown("Jump") && Jumpsleft > 0)
         {
             gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, JumpHeight), ForceMode2D.Impulse);
             Jumpsleft--;
         }
+        */
     }
-    void Rotate()
+/*    void Rotate()
     {
         //ROTATION WITH Q/E
         if (isRight == true)
@@ -76,6 +91,7 @@ public class Move : MonoBehaviour
             }
         }
     }
+    */
     void AnimatorMove()
     {
         //check if character is grounded and running and change animator variable
@@ -90,7 +106,7 @@ public class Move : MonoBehaviour
         //set animator variable speed to movement value
         animator.SetFloat("Speed", moving);
     }
-    void Flip(Vector3 movement)
+    void Flip(Vector2 movement)
     {
         if (movement.x < 0 && isRight == true)
         {
@@ -108,14 +124,14 @@ public class Move : MonoBehaviour
     if(Input.GetButton("Crouch"))
         {
             animator.SetBool("IsCrouching", true);
-            BoxCollide.size = new Vector2(BoxCollide.size.x, 3.397791f);
-            BoxCollide.offset = new Vector2(BoxCollide.offset.x, -2f);
+            BoxCollide.size = new Vector2(BoxCollide.size.y, 0.1256896f);
+            BoxCollide.offset = new Vector2(BoxCollide.offset.y, -0.04426715f);
         }
-        else
+        else if (isHeadHitting == false)
         {
             animator.SetBool("IsCrouching", false);
-            BoxCollide.size = new Vector2(BoxCollide.size.x, 7.634738f);
-            BoxCollide.offset = new Vector2(BoxCollide.offset.x, 0.08115101f);
+            BoxCollide.size = new Vector2(BoxCollide.size.y, 0.2275364f);
+            BoxCollide.offset = new Vector2(BoxCollide.offset.y, 0.006656244f);
         }
     }
 }
