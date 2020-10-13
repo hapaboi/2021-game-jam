@@ -6,19 +6,27 @@ public class Move : MonoBehaviour
 {
     public float JumpHeight = 1f;
     public float moveSpeed = 5f;
+
     public bool isGrounded = false;
-    public bool isRight = true;
+    private bool isRight = true;
+
     private int Jumpsleft;
     public int extraJumpsValue;
+    private float jumpTimeCounter;
+    public float jumpTime;
+    private bool isJumping;
+
     public Animator animator;
     public float moving = 0;
-    public BoxCollider2D BoxCollide;
+    //public BoxCollider2D BoxCollide;
     private Rigidbody2D rb;
-    public bool isHeadHitting = false;
+    private SpriteRenderer sr;
+
     // Start is called before the first frame update
     void Start()
     {
-        BoxCollide = GetComponent<BoxCollider2D>();
+        //BoxCollide = GetComponent<BoxCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         Jumpsleft = extraJumpsValue;
     }
@@ -26,12 +34,11 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Rotate();
         Jump();
-        Crouch();
         AnimatorMove();
         //get horizontal input and move character
         rb.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, rb.velocity.y);
+        //rb.AddForce();
         Flip(rb.velocity);
 
     }
@@ -39,8 +46,26 @@ public class Move : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && Jumpsleft > 0)
         {
-            rb.velocity = Vector2.up * JumpHeight;
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
+            //rb.velocity = Vector2.up * JumpHeight;
             Jumpsleft--;
+        }
+        if (Input.GetButton("Jump") && isJumping == true)
+        {
+            if (jumpTimeCounter > 0)
+            {
+                rb.velocity = Vector2.up * JumpHeight;
+                jumpTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                isJumping = false;
+            }
+        }
+        if (Input.GetButtonUp("Jump"))
+        {
+            isJumping = false;
         }
         /*else if (Input.GetButtonDown("Jump") && Jumpsleft == 0 && isGrounded == true)
         {
@@ -65,33 +90,6 @@ public class Move : MonoBehaviour
         }
         */
     }
-/*    void Rotate()
-    {
-        //ROTATION WITH Q/E
-        if (isRight == true)
-        {
-            if (Input.GetAxis("Rotate") < 0)
-            {
-                transform.Rotate(Vector3.forward * 0.5f);
-            }
-            if (Input.GetAxis("Rotate") > 0)
-            {
-                transform.Rotate(Vector3.forward * -0.5f);
-            }
-        }
-        if (isRight == false)
-        {
-            if (Input.GetAxis("Rotate") < 0)
-            {
-                transform.Rotate(Vector3.forward * -0.5f);
-            }
-            if (Input.GetAxis("Rotate") > 0)
-            {
-                transform.Rotate(Vector3.forward * 0.5f);
-            }
-        }
-    }
-    */
     void AnimatorMove()
     {
         //check if character is grounded and running and change animator variable
@@ -110,28 +108,15 @@ public class Move : MonoBehaviour
     {
         if (movement.x < 0 && isRight == true)
         {
-            transform.Rotate(0f, 180f, 0f);
+            //transform.Rotate(0f, 180f, 0f);
+            sr.flipX = true;
             isRight = false;
         }
         else if (movement.x > 0 && isRight == false)
         {
-            transform.Rotate(0f, 180f, 0f);
+            //transform.Rotate(0f, 180f, 0f);
+            sr.flipX = false;
             isRight = true;
-        }
-    }
-    void Crouch()
-    {
-    if(Input.GetButton("Crouch"))
-        {
-            animator.SetBool("IsCrouching", true);
-            BoxCollide.size = new Vector2(BoxCollide.size.y, 0.1256896f);
-            BoxCollide.offset = new Vector2(BoxCollide.offset.y, -0.04426715f);
-        }
-        else if (isHeadHitting == false)
-        {
-            animator.SetBool("IsCrouching", false);
-            BoxCollide.size = new Vector2(BoxCollide.size.y, 0.2275364f);
-            BoxCollide.offset = new Vector2(BoxCollide.offset.y, 0.006656244f);
         }
     }
 }
