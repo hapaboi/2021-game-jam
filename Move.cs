@@ -76,11 +76,22 @@ public class Move : MonoBehaviour
         {
             animator.SetBool("IsJumping", false);
             Jumpsleft = extraJumpsValue;
+            animator.SetBool("IsGrounded", true);
+
         }
         //if not grounded set isjumping to true
         if (isGrounded == false)
         {
             animator.SetBool("IsJumping", true);
+            animator.SetBool("IsGrounded", false);
+        }
+        if (rb.velocity.y < -0.1)
+        {
+            animator.SetBool("IsFalling", true);
+        }
+        else
+        {
+            animator.SetBool("IsFalling", false);
         }
         /*
         if (Input.GetButtonDown("Jump") && Jumpsleft > 0)
