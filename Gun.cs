@@ -15,7 +15,9 @@ public class Gun : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //take mouse position - transform position to get x and y values of difference.
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        //do tan y/x * rad2Deg to find angle of rotaiton
         float RotationZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, RotationZ + offset);
 
