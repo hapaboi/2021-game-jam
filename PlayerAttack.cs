@@ -14,23 +14,21 @@ public class PlayerAttack : MonoBehaviour
     //public Animator camAnim;
     //public Animator playerAnim;
     public Vector2 weaponRange;
+    public Animator animator;
     public float weaponAngle;
     public int damage;
+    private float RotationZ;
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        //do tan y/x * rad2Deg to find angle of rotaiton
-        float RotationZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-        weapon.transform.rotation = Quaternion.Euler(0f, 0f, RotationZ);
+        animator.SetBool("IsAttacking", false);
         //time between attack + circle hurtbox
         if (timeBtwAttack <= 0)
         {
             if (Input.GetKey(KeyCode.E))
             {
-                //camAnim.SetTrigger("shake");
-                //playerAnim.SetTrigger("attack");
+                animator.SetBool("IsAttacking", true);
                 //creates circle that gets a list of all colliders that fall within the area
                 Collider2D[] AmountEnemies = Physics2D.OverlapBoxAll(weapon.transform.position, weaponRange, weaponAngle, isEnemy);
                 for (int i = 0; i < AmountEnemies.Length; i++)
@@ -38,6 +36,8 @@ public class PlayerAttack : MonoBehaviour
                     //loop for how many enemies there are, pass damage into enemies damage function and lower health
                     AmountEnemies[i].GetComponent<Enemy>().TakeDamage(damage);
                 }
+                //camAnim.SetTrigger("shake");
+                //playerAnim.SetTrigger("attack");
                 timeBtwAttack = startTimeBtwAttack;
             }
         }

@@ -42,7 +42,7 @@ public class Move : MonoBehaviour
         Flip(rb.velocity);
 
     }
-    void Jump()
+    private void Jump()
     {
         if (Input.GetButtonDown("Jump") && Jumpsleft > 0)
         {
@@ -101,7 +101,7 @@ public class Move : MonoBehaviour
         }
         */
     }
-    void AnimatorMove()
+    private void AnimatorMove()
     {
         //check if character is grounded and running and change animator variable
         if (Input.GetAxis("Horizontal") != 0 && isGrounded == true)
@@ -115,7 +115,7 @@ public class Move : MonoBehaviour
         //set animator variable speed to movement value
         animator.SetFloat("Speed", moving);
     }
-    void Flip(Vector2 movement)
+    private void Flip(Vector2 movement)
     {
         if (movement.x < 0 && isRight == true)
         {
