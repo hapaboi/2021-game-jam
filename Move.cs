@@ -19,15 +19,12 @@ public class Move : MonoBehaviour
     public Animator animator;
     public float moving = 0;
     //public BoxCollider2D BoxCollide;
-    private Rigidbody2D rb;
-    private SpriteRenderer sr;
+    public Rigidbody2D rb;
+    public SpriteRenderer sr;
 
     // Start is called before the first frame update
     void Start()
     {
-        //BoxCollide = GetComponent<BoxCollider2D>();
-        sr = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
         Jumpsleft = extraJumpsValue;
     }
 

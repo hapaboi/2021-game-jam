@@ -36,7 +36,6 @@ public class PlayerAttack : MonoBehaviour
                     //loop for how many enemies there are, pass damage into enemies damage function and lower health
                     AmountEnemies[i].GetComponent<Enemy>().TakeDamage(damage);
                 }
-                //camAnim.SetTrigger("shake");
                 //playerAnim.SetTrigger("attack");
                 timeBtwAttack = startTimeBtwAttack;
             }
